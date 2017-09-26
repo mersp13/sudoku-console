@@ -1,61 +1,67 @@
 #!/usr/bin/env python
 # coding=utf-8
 
-sudoku = []
+import re, os, sys
 
-print("\
-+-------+-------+-------+\n\
-| % % % | % % % | % % % |\n\
-| % % % | % % % | % % % |\n\
-| % % % | % % % | % % % |\n\
-+-------+-------+-------+\n\
-| % % % | % % % | % % % |\n\
-| % % % | % % % | % % % |\n\
-| % % % | % % % | % % % |\n\
-+-------+-------+-------+\n\
-| % % % | % % % | % % % |\n\
-| % % % | % % % | % % % |\n\
-| % % % | % % % | % % % |\n\
-+-------+-------+-------+\n\
-")
-
-def SudokuInput():
-    for i in range(0, 9):
-        for j in range(0, 9):
-            print("Please input a number for (row %s, col %s)" %(i, j))
-            sudoku_input = int(input())
-            if sudoku_input > 0 and sudoku_input <= 9:
-                sudoku_input = str(sudoku_input)
-            else:
-                sudoku_input = " "
-            sudoku.append(sudoku_input)
+def SudokuInit():
+    sudoku = {}
+    for i in range(9):
+        for j in range(9):
+            sudoku["(%s, %s)" %(i+1, j+1)] = " "
     return sudoku
 
-def SudokuSolver():
+def SudokuInput(sudoku):
+    print("Input format: 'row col num'" +
+        "\n\\" + "| enter 'end' to end input" +
+        "\n\\" + "| enter 'reset' to reset" +
+        "\n\\" + "| enter 'exit' to exit")
+    sudoku_input = raw_input()
+    if sudoku_input == "end":
+        ask_msg = raw_input("solve this sudoku? ('y' or 'n')")
+        if ask_msg == "y":
+            SudokuSolver(sudoku)
+        elif ask_msg == "n":
+            pass
+        else:
+            pass
+    elif sudoku_input == "reset":
+        for k in sudoku.keys():
+            sudoku[k] = " "
+    elif sudoku_input == "exit":
+        sys.exit()
+    else:
+        sudoku_reg = re.compile("(?P<row>\d)(\D)+(?P<col>\d)(\D)+(?P<num>\d)")
+        match_obj = sudoku_reg.match(sudoku_input)
+        if match_obj:
+            match_dict = match_obj.groupdict()
+            if "0" not in match_dict.values():
+                sudoku["(%s, %s)" %(match_dict["row"], match_dict["col"])] = match_dict["num"]
+                return sudoku
+
+def SudokuSolver(sudoku):    #TODO:sudokusolver
     pass
 
 def SudokuPrint(sudoku):
-    for i in range(0, 3):
+    for i in range(3):
         print("+-------+-------+-------+")
-        for j in range(0, 3):
-            print("| " + sudoku[(9*i*(j-1))] + " " + sudoku[((9*i*(j-1))+1)] + " " + sudoku[((9*i*(j-1))+2)] + " | "
-                    + sudoku[(9*i*(j-1))+3] + " " + sudoku[((9*i*(j-1))+3)] + " " + sudoku[((9*i*(j-1))+5)] + " | "
-                    + sudoku[(9*i*(j-1))+6] + " " + sudoku[((9*i*(j-1))+7)] + " " + sudoku[((9*i*(j-1))+8)] + " |")
+        for j in range(3):
+            print("| " + sudoku["(%s, %s)" %(3*i+j+1, 1)] + " "
+                    + sudoku["(%s, %s)" %(3*i+j+1, 2)] + " "
+                    + sudoku["(%s, %s)" %(3*i+j+1, 3)] + " | "
+                    + sudoku["(%s, %s)" %(3*i+j+1, 4)] + " "
+                    + sudoku["(%s, %s)" %(3*i+j+1, 5)] + " "
+                    + sudoku["(%s, %s)" %(3*i+j+1, 6)] + " | "
+                    + sudoku["(%s, %s)" %(3*i+j+1, 7)] + " "
+                    + sudoku["(%s, %s)" %(3*i+j+1, 8)] + " "
+                    + sudoku["(%s, %s)" %(3*i+j+1, 9)] + " |")
     print("+-------+-------+-------+")
 
-
-sudoku = SudokuInput()
+sudoku = SudokuInit()
 while True:
-    print("Solve this Sudoku?('y'or'n')")
-    YoN_selection = input()
-    if YoN_selection == "y":
-        SudokuSolver()
-        break
-    elif YoN_selection == "n":
-        sudoku = SudokuInput()
-    else:
-        print("unknown command")
-
+    SudokuPrint(sudoku)
+    print(len(sudoku.values()))
+    SudokuInput(sudoku)
+    os.system("cls")
 
 
 
