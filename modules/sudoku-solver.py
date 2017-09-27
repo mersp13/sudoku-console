@@ -10,14 +10,21 @@ def SudokuInit():
             sudoku["(%s, %s)" %(i+1, j+1)] = " "
     return sudoku
 
+def TxtInput(txt=""):
+    if sys.hexversion < 0x30000F0:
+        txt_input = raw_input(str(txt))
+    else:
+        txt_input = input(str(txt))
+    return txt_input
+
 def SudokuInput(sudoku):
     print("Input format: 'row col num'" +
         "\n\\" + "| enter 'end' to end input" +
         "\n\\" + "| enter 'reset' to reset" +
         "\n\\" + "| enter 'exit' to exit")
-    sudoku_input = raw_input()
+    sudoku_input = TxtInput()
     if sudoku_input == "end":
-        ask_msg = raw_input("solve this sudoku? ('y' or 'n')")
+        ask_msg = TxtInput("solve this sudoku? ('y' or 'n')")
         if ask_msg == "y":
             SudokuSolver(sudoku)
         elif ask_msg == "n":
@@ -55,6 +62,11 @@ def SudokuPrint(sudoku):
                     + sudoku["(%s, %s)" %(3*i+j+1, 8)] + " "
                     + sudoku["(%s, %s)" %(3*i+j+1, 9)] + " |")
     print("+-------+-------+-------+")
+
+
+if sys.hexversion < 0x20700F0:
+    print("a higher python version is required")
+    sys.exit()
 
 sudoku = SudokuInit()
 while True:
