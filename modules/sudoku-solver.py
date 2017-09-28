@@ -43,11 +43,11 @@ def SudokuInput(sudoku):
             match_dict = match_obj.groupdict()
             if "0" not in match_dict.values():
                 sudoku["(%s, %s)" %(match_dict["row"], match_dict["col"])] = match_dict["num"]
-                '''NOTE
                 for i in range(1, 10):
-                    if (i != int(match_dict["col"])) and (lambda i:sudoku["(%s, %s)" %(match_dict["row"], i)] == match_dict["num"]):
+                    if (i != int(match_dict["col"])) and (sudoku["(%s, %s)" %(match_dict["row"], i)] == match_dict["num"]):
                         sudoku["(%s, %s)" %(match_dict["row"], i)] = " "
-                '''
+                    if (i != int(match_dict["row"])) and (sudoku["(%s, %s)" %(i, match_dict["col"])] == match_dict["num"]):
+                        sudoku["(%s, %s)" %(i, match_dict["col"])] = " "
                 return sudoku
 
 def SudokuChecker(sudoku):   #TODO:sudokuchecker
