@@ -17,7 +17,21 @@ def TxtInput(txt=""):
         txt_input = input(str(txt))
     return txt_input
 
-def SudokuInput(sudoku):
+def SquareDict(row_args, col_args):
+    row_modrlt = int(row_args) % 3
+    col_modrlt = int(col_args) % 3
+    row_modict = {"1": [int(row_args) + 1, int(row_args) + 2],
+                    "2": [int(row_args) - 1, int(row_args) + 1],
+                    "0": [int(row_args) - 2, int(row_args) - 1]
+                    }
+    col_modict = {"1": [int(col_args) + 1, int(col_args) + 2],
+                    "2": [int(col_args) - 1, int(col_args) + 1],
+                    "0": [int(col_args) - 2, int(col_args) - 1]
+                    }
+    square_dict = {"row": row_modict["%s" %row_modrlt], "col": col_modict["%s" %col_modrlt]}
+    return square_dict
+
+def SudokuInput(soduko):
     print("Input format: 'row col num'" +
         "\n\\" + "| enter 'end' to end input" +
         "\n\\" + "| enter 'reset' to reset" +
@@ -48,6 +62,11 @@ def SudokuInput(sudoku):
                         sudoku["(%s, %s)" %(match_dict["row"], i)] = " "
                     if (i != int(match_dict["row"])) and (sudoku["(%s, %s)" %(i, match_dict["col"])] == match_dict["num"]):
                         sudoku["(%s, %s)" %(i, match_dict["col"])] = " "
+                square_dict = SquareDict(match_dict["row"], match_dict["col"])
+                for i in square_dict["row"]:
+                    for j in square_dict["col"]:
+                        if sudoku["(%s, %s)" %(i, j)] == match_dict["num"]:
+                            sudoku["(%s, %s)" %(i, j)] = " "
                 return sudoku
 
 def SudokuChecker(sudoku):   #TODO:sudokuchecker
