@@ -73,7 +73,33 @@ def SudokuChecker(sudoku):   #TODO:sudokuchecker
     pass
 
 def SudokuSolver(sudoku):    #TODO:sudokusolver
-    pass
+    pri_subdict = {}
+    sec_subdict = {}
+    for i in range(1, 10):
+        for j in range(1, 10):
+            if sudoku["(%s, %s)" %(i, j)] == " ":
+                sec_subdict.update({"(%s, %s)" %(i, j): " "})
+                del sudoku["(%s, %s)" %(i, j)]
+    pri_subdict = sudoku          #TODO:solve in sec_subdict
+    '''
+    sudoku.update(dict(pri_subdict, **sec_subdict))
+    while " " in sudoku.values():
+        for i in range(1, 10):
+            rcs_dict = {}
+            rcs_dict.update(sudoku["(%s, %s)" %(match_dict["row"], i)])
+            rcs_dict.update(sudoku["(%s, %s)" %(i, match_dict["col"])])
+        square_dict = SquareDict(match_dict["row"], match_dict["col"])
+            for i in square_dict["row"]:
+                for j in square_dict["col"]:
+                    rcs_dict.update(sudoku["(%s, %s)" %(i, j)])
+
+
+                    for k in range(1, 10):
+                    if k not in (row_list + col_list + squ_list):
+                        sec_subdict["(%s, %s)" %(i, j)] = k
+    '''
+    sudoku.update(dict(pri_subdict, **sec_subdict))
+    return sudoku
 
 def SudokuPrint(sudoku):
     for i in range(3):
